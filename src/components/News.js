@@ -98,7 +98,7 @@ export default class News extends Component {
             disabled={
               Math.ceil(this.state.totalResults / this.props.pageSize) <
               this.state.page + 1
-            }
+            } 
           >
             Next&rarr;
           </button>
