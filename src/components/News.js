@@ -13,7 +13,7 @@ export default class News extends Component {
   }
 
   async componentDidMount() {
-    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=1&pagesize=${this.props.pageSize}`;
+    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=1&pagesize=${this.props.pageSize}`;
     let data = await fetch(apiUrl);
     let dataJson = await data.json();
     this.setState({
@@ -25,7 +25,9 @@ export default class News extends Component {
 
   HandlePreviousClick = async () => {
     this.setState({ loading: true });
-    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${
+    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${
+      this.props.category
+    }&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${
       this.state.page - 1
     }&pagesize=${this.props.pageSize}`;
     let data = await fetch(apiUrl);
@@ -45,7 +47,9 @@ export default class News extends Component {
         this.state.page + 1
       )
     ) {
-      let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${
+      let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${
+        this.props.category
+      }&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${
         this.state.page + 1
       }&pagesize=${this.props.pageSize}`;
       this.setState({ loading: true });
@@ -69,14 +73,16 @@ export default class News extends Component {
           <div className='text-center'>{this.state.loading && <Spinner />}</div>
           <div className='row'>
             {this.state.articles.map((element) => {
-              return (!this.state.loading &&
-                <NewsItem
-                  key={element.url}
-                  title={element.title}
-                  description={element.description}
-                  imgurl={element.urlToImage}
-                  newsUrl={element.url}
-                />
+              return (
+                !this.state.loading && (
+                  <NewsItem
+                    key={element.url}
+                    title={element.title}
+                    description={element.description}
+                    imgurl={element.urlToImage}
+                    newsUrl={element.url}
+                  />
+                )
               );
             })}
           </div>
@@ -98,7 +104,7 @@ export default class News extends Component {
             disabled={
               Math.ceil(this.state.totalResults / this.props.pageSize) <
               this.state.page + 1
-            } 
+            }
           >
             Next&rarr;
           </button>
