@@ -22,46 +22,31 @@ export default class News extends Component {
       loading: false,
     });
   }
-
-  HandlePreviousClick = async () => {
-    this.setState({ loading: true });
-    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${
-      this.props.category
-    }&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${
-      this.state.page - 1
-    }&pagesize=${this.props.pageSize}`;
+  async updateState() {
+    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${this.state.page}&pagesize=${this.props.pageSize}`;
     let data = await fetch(apiUrl);
     let dataJson = await data.json();
+    this.setState({
+      articles: dataJson.articles,
+      totalResults: dataJson.totalResults,
+      loading: false,
+    });
+  }
+
+  HandlePreviousClick = async () => {
 
     this.setState({
       page: this.state.page - 1,
-      articles: dataJson.articles,
-      loading: false,
     });
+    this.updateState();
   };
 
   HandleNextClick = async () => {
-    if (
-      !(
-        Math.ceil(this.state.totalResults / this.props.pageSize) <
-        this.state.page + 1
-      )
-    ) {
-      let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${
-        this.props.category
-      }&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${
-        this.state.page + 1
-      }&pagesize=${this.props.pageSize}`;
-      this.setState({ loading: true });
-      let data = await fetch(apiUrl);
-      let dataJson = await data.json();
-
-      this.setState({
-        page: this.state.page + 1,
-        articles: dataJson.articles,
-        loading: false,
-      });
-    }
+   
+    this.setState({
+      page: this.state.page + 1,
+    });
+    this.updateState();
   };
 
   render() {
@@ -81,6 +66,8 @@ export default class News extends Component {
                     description={element.description}
                     imgurl={element.urlToImage}
                     newsUrl={element.url}
+                    publishedAt={element.publishedAt}
+                    author={element.author}
                   />
                 )
               );

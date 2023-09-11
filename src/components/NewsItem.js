@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 
 export default class NewsItem extends Component {
   render() {
-    let { title, description, imgurl, newsUrl } = this.props;
+    let { title, description, imgurl, newsUrl, publishedAt, author } =
+      this.props;
     return (
       <>
         <div className='col-md-4'>
-          <div className='card' style={{ width: '18rem'}}>
+          <div className='card' style={{ width: '18rem' }}>
             <img
               src={
                 imgurl
@@ -22,6 +23,17 @@ export default class NewsItem extends Component {
               <p className='card-text'>
                 {description ? description.slice(0, 88) : ''}...
               </p>
+              <p className='card-text'>
+                <small className='text-muted'>
+                  Author: {author ? author : 'Anonymous'}
+                </small>
+                <br></br>
+                <small className='text-muted'>
+                  Last updated: &nbsp;
+                  {publishedAt && new Date(publishedAt).toLocaleString()}{' '}
+                </small>
+              </p>
+
               <a
                 href={newsUrl}
                 rel='noreferrer'

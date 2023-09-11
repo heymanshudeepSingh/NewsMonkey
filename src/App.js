@@ -27,7 +27,7 @@ function App() {
         <Routes>
         <Route exact path={`/`} element={<News key='general' pageSize={9} category='general' />} />
           {categories.map((category) => (
-            <Route exact path={`/${category}`} element={<News key={category} pageSize={9} category={category} />} />
+            <Route exact path={`/${category}`} key={category} element={<News key={category} pageSize={9} category={category} />} />
           ))}
         </Routes>
       </div>
