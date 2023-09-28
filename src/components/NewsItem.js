@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 
 export default class NewsItem extends Component {
   render() {
-    let { title, description, imgurl, newsUrl, publishedAt, author } =
-      this.props;
+    let {
+      title,
+      description,
+      imgurl,
+      newsUrl,
+      publishedAt,
+      author,
+    } = this.props;
     return (
       <>
         <div className='col-md-4'>
@@ -30,7 +36,7 @@ export default class NewsItem extends Component {
                 <br></br>
                 <small className='text-muted'>
                   Last updated: &nbsp;
-                  {publishedAt && new Date(publishedAt).toLocaleString()}{' '}
+                  {publishedAt && new Date(publishedAt).toLocaleString()}
                 </small>
               </p>
 
