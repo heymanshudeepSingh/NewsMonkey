@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import LoadingBar from 'react-top-loading-bar';
+
 export default class News extends Component {
-  articles = [];
+  // articles = [];
   constructor() {
     super();
     this.state = {
@@ -11,10 +13,13 @@ export default class News extends Component {
       loading: true,
       page: 1,
       totalResults: 0,
+      progress: 0,
     };
   }
 
   async componentDidMount() {
+    this.setProgress(10);
+
     let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&page=${this.state.page}&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=1&pagesize=${this.props.pageSize}`;
     let data = await fetch(apiUrl);
     let dataJson = await data.json();
@@ -23,8 +28,11 @@ export default class News extends Component {
       totalResults: dataJson.totalResults,
       loading: false,
     });
+    this.setProgress(100);
   }
   async updateState() {
+    this.setProgress(10);
+
     let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=fd7fc2daecba428fb5009ffe1cf164a9&page=${this.state.page}&pagesize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(apiUrl);
@@ -34,6 +42,7 @@ export default class News extends Component {
       totalResults: dataJson.totalResults,
       loading: false,
     });
+    this.setProgress(100);
   }
 
   HandlePreviousClick = async () => {
@@ -51,7 +60,8 @@ export default class News extends Component {
   };
 
   fetchMoreData = async () => {
-    
+    this.setProgress(10);
+
     this.setState({
       page: this.state.page + 1,
     });
@@ -64,12 +74,23 @@ export default class News extends Component {
       totalResults: dataJson.totalResults,
       // loading: false,
     });
-  
+    this.setProgress(100);
+
+  };
+
+  setProgress = (prog) => {
+    this.setState({ progress: prog });
   };
 
   render() {
     return (
       <>
+        <LoadingBar
+          color='#f11946'
+          height={3}
+          progress={this.state.progress}
+          onLoaderFinished={() => this.setProgress(0)}
+        />
         <div className='container my-3'>
           <h1 className='text-center'>Top Headlines</h1>
 
