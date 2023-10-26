@@ -14,22 +14,6 @@ const News = (props) => {
   const [totalResults, settotalResults] = useState(0);
   const [progress, setprogress] = useState(0);
 
-  // const componentDidMount = async () => {
-  //   setprogress(10);
-  //   try {
-  //     let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${props.category}&page=${state.page}&apiKey=${props.apiKey}&page=1&pagesize=${props.pageSize}`;
-  //     let data = await fetch(apiUrl);
-  //     let dataJson = await data.json();
-  //     setarticles(dataJson.articles);
-  //     settotalResults(dataJson.totalResults);
-  //     setloading(false);
-  //   } catch (error) {
-  //     // Handle the error here
-  //     console.error('API Error:', error);
-  //   }
-  //   setprogress(100);
-  // };
-
   const updateState = async () => {
     setprogress(10);
 
@@ -45,30 +29,21 @@ const News = (props) => {
 
   useEffect(() => {
     updateState();
+    //eslint-disable-next-line
   }, []);
-
-  // const HandlePreviousClick = async () => {
-  //   setpage(page - 1);
-  //   updateState();
-  // };
-
-  // const HandleNextClick = async () => {
-  //   setpage(page + 1);
-  //   updateState();
-  // };
 
   const fetchMoreData = async () => {
     setprogress(10);
-    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pagesize=${props.pageSize}`;
-    setPage(page + 1); // Increment page by 1  
+    let apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=${
+      props.category
+    }&apiKey=${props.apiKey}&page=${page + 1}&pagesize=${props.pageSize}`;
+    setPage(page + 1); // Increment page by 1
     let data = await fetch(apiUrl);
     let dataJson = await data.json();
     setarticles(articles.concat(dataJson.articles));
     settotalResults(dataJson.totalResults);
     setprogress(100);
   };
-  
-
 
   return (
     <>
@@ -79,7 +54,9 @@ const News = (props) => {
         onLoaderFinished={() => setprogress(0)}
       />
       <div className='container my-3'>
-        <h1 className='text-center' style={{ marginTop: `75px` }}>Top Headlines</h1>
+        <h1 className='text-center' style={{ marginTop: `75px` }}>
+          Top Headlines
+        </h1>
         <div className='text-center'>
           {loading && <Spinner />}
           <InfiniteScroll
@@ -90,10 +67,11 @@ const News = (props) => {
             endMessage={<p>No more data to load.</p>}
           >
             <div className='row'>
-              {articles.map((element) => {
+              {articles.map((element, index) => {
+                const uniqueKey = `${element.url}_${index}`;
                 return (
                   <NewsItem
-                    key={element.url}
+                    key={uniqueKey}
                     title={element.title}
                     description={element.description}
                     imgurl={element.urlToImage}
